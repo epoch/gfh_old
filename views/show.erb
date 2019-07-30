@@ -4,3 +4,25 @@
 
 <a href="/dishes/<%= @dish.id %>/edit">edit dish</a>
 
+<form action="/dishes/<%= @dish.id %>" method="post">
+  <input type="hidden" name="_method" value="delete">
+  <button>begone</button>
+</form>
+
+<h2>comments</h2>
+
+
+<% if session[:user_id] %>
+
+<form action="/comments" method="post">
+  <input type="hidden" name="dish_id" value="<%= @dish.id %>">
+  <textarea name="body"></textarea>
+  <button>post comment</button>
+</form>
+
+<% end %>
+
+<% @comments.each do |comment| %>
+  <p><%= comment.body %></p>
+<% end %>
+
