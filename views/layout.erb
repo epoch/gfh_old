@@ -3,16 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello World</title>
+  <link rel="stylesheet" href="/stylesheets/reset.css">
   <link rel='stylesheet' href='/stylesheets/main.css'>
-</head>
+</head> 
 <body>
-  <% if session[:user_id] %>
-    <div>logged in as <%= User.find(session[:user_id]).email %></div>
+  <nav>
+    <a href="/">home</a>
+    <a href="/dishes">all dishes</a>
+    <a href="/popular">popular</a>
+  </nav>
 
-    <form action="/session" method="post">
+  <% if logged_in? %>
+    <div>logged in as <%= current_user.email %></div>
+
+    <a href="/my_dishes">my dishes</a>
+
+    <form action="/sessions" method="post">
       <input type="hidden" name="_method" value="delete">
       <button>logout</button>
     </form>
+  <% else %>
+    <a href="/login">login</a>
   <% end %>  
 
   <%= yield %>

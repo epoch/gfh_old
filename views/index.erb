@@ -4,9 +4,9 @@
 
 <% @dishes.each do |dish| %>
 
-  <p><a href="/dishes/<%= dish.id %>"><%= dish.title %></a></p>
+  <h2><a href="/dishes/<%= dish.id %>"><%= dish.title %></a> by <%= dish.user.email %></h2>
+  <h4><%= dish.category.name %></h4>
 
 <% end %>
-
 
 <a href="#title">teleport to top</a>

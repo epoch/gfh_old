@@ -1,105 +1,54 @@
 require 'sinatra'
+
 require 'sinatra/reloader'
+also_reload File.expand_path(__dir__, 'models/*')
+also_reload File.expand_path(__dir__, 'views/*')
+
 require_relative 'database_config'
 
 require_relative "models/dish"
 require_relative "models/comment"
 require_relative "models/user"
+require_relative "models/category"
 
 enable :sessions
+
+# make methods also be available in templates
+helpers do
+
+  def logged_in? # predicate method - will return a boolean
+    # !!current_user
+    if current_user
+      return true
+    else
+      return false
+    end
+  end
+
+  def current_user
+    User.find_by(id: session[:user_id])
+  end
+
+end
 
 after do
   ActiveRecord::Base.connection.close
 end
 
 get '/' do
-  @dishes = Dish.all
-  erb :index
+  @dishes = Dish.order(:created_at => 'desc').limit(3)
+  erb :home
 end
 
-get '/dishes/new' do
-  erb :new
+get '/my_dishes' do
+  @dishes = Dish.where(user_id: current_user.id)
+  erb :my_dishes
 end
 
-post '/dishes' do
-  dish = Dish.new
-  dish.title = params[:title]
-  dish.image_url = params[:image_url]
-  dish.save
-  redirect '/'
-end
+require_relative 'routes/dishes'
+require_relative 'routes/comments'
+require_relative 'routes/sessions'
 
-get '/dishes/:id' do
-  # redirect '/login' unless session[:user_id]
-  @dish = Dish.find(params[:id])
-  @comments = Comment.where(dish_id: params[:id])
-  erb :show
-end
-
-# read - fetch me the edit form
-get '/dishes/:id/edit' do
-  @dish = Dish.find(params[:id])
-  erb :edit
-end
-
-# update existing dish
-put '/dishes/:id' do
-  # params[:id]
-  # params[:title]
-  # params[:image_url]
-  dish = Dish.find(params[:id])
-  dish.title = params[:title]
-  dish.image_url = params[:image_url]
-  dish.save
-  redirect "/dishes/#{dish.id}"
-end
-
-delete "/dishes/:id" do
-  # 1. remove record from database
-  dish = Dish.find(params[:id]) # no @ symbol because no template for this route
-  dish.destroy # dish.delete also works
-  # 2. redirect
-  redirect "/"
-end
-
-post '/comments' do
-  redirect '/login' unless session[:user_id]
-  # insert comment into db
-  # params[:body]
-  comment = Comment.new
-  comment.body = params[:body]
-  comment.dish_id = params[:dish_id]
-  comment.save
-  redirect "/dishes/#{params[:dish_id]}"
-end
-
-get '/login' do
-  erb :login
-end
-
-post '/session' do
-  # params[:email]
-  # params[:password]
-  # 1. look up the user with email address
-  user = User.find_by(email: params[:email])
-  # 2.
-  if user && user.authenticate(params[:password])
-    # create a session
-    session[:user_id] = user.id # its a hash - named session
-    # yay - please follow me
-    redirect "/"
-  else
-    # wrong email or password
-    erb :login
-  end
-end
-
-delete '/session' do
-  # 1. destroy the session
-  session[:user_id] = nil
-  # 2. redirect
-  redirect '/login'
-end
 
 
 

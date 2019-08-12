@@ -1,0 +1,58 @@
+
+<div class="ui-card">
+  <header class="content">
+    <div>
+      <img class="avatar" src="https://via.placeholder.com/50" alt="">
+    </div>
+    <div class="username">dt</div>
+    <div>17h</div>
+  </header>
+  <section class="image-wrapper">
+    <img src="https://via.placeholder.com/800" alt="">
+    <div class="heart">♥</div>
+  </section>
+  <section class="content">
+    <h2>pudding</h2>
+    <h4>at GA</h4>
+  </section>
+  <footer class="content">
+    <div>likes <span class="likes-count">7</span></div>
+  </footer>
+</div>
+
+
+<div class="ui-card">
+  <header class="content">
+    <div>
+      <img class="avatar" src="https://via.placeholder.com/50" alt="">
+    </div>
+    <div class="username">dt</div>
+    <div>17h</div>
+  </header>
+  <section class="image-wrapper">
+    <img src="https://via.placeholder.com/800" alt="">
+    <div class="heart">♥</div>
+  </section>
+  <section class="content">
+    <h2>pudding</h2>
+    <h4>at GA</h4>
+  </section>
+  <footer class="content">
+    <div>likes <span class="likes-count">7</span></div>
+  </footer>
+</div>
+
+<div class="special">me over here !!!!</div>
+
+<script>
+
+  var heart = document.querySelector('.heart')
+  var likesCount = document.querySelector('.likes-count')
+
+  var handleClick = function() {
+    likesCount.textContent = Number(likesCount.textContent) + 1
+  }
+
+  heart.addEventListener('click', handleClick)
+
+</script>

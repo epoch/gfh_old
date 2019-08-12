@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :comments # adds methods to user
+  has_many :dishes
+
   has_secure_password
   # abstracts bcrypt for us
   # this will add some new methods for user for you

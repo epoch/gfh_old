@@ -1,9 +1,10 @@
 <h1>details</h1>
 
+
 <%= @dish.title %>
 
 <a href="/dishes/<%= @dish.id %>/edit">edit dish</a>
-
+ 
 <form action="/dishes/<%= @dish.id %>" method="post">
   <input type="hidden" name="_method" value="delete">
   <button>begone</button>
@@ -14,6 +15,10 @@
 
 <% if session[:user_id] %>
 
+<% @comment.errors.full_messages.each do |msg|%>
+  <p><%= msg %></p>
+<% end %>
+
 <form action="/comments" method="post">
   <input type="hidden" name="dish_id" value="<%= @dish.id %>">
   <textarea name="body"></textarea>
@@ -23,6 +28,5 @@
 <% end %>
 
 <% @comments.each do |comment| %>
-  <p><%= comment.body %></p>
+  <p><%= comment.body %> by <%= comment.user.email %></p>
 <% end %>
-
